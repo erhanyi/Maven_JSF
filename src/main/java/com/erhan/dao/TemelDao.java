@@ -9,9 +9,10 @@ import org.hibernate.Session;
  * @author erhan
  */
 public abstract class TemelDao {
+    
+    private final Session session = HibernateUtil.getSessionFactory().openSession();
 
     public void kaydetObje(Object object) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
             session.save(object);
@@ -25,7 +26,6 @@ public abstract class TemelDao {
     }
 
     public void kaydetVeyaGuncelleObje(Object object) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
             session.saveOrUpdate(object);
@@ -39,7 +39,6 @@ public abstract class TemelDao {
     }
 
     public void silObje(Object object) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
             session.delete(object);
@@ -53,7 +52,6 @@ public abstract class TemelDao {
     }
 
     public void kaydetObjeList(List<Object> objectList) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
             objectList.forEach((object) -> {
@@ -69,7 +67,6 @@ public abstract class TemelDao {
     }
 
     public void kaydetVeyaGuncelleObjeList(List<Object> objectList) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
             objectList.forEach((object) -> {
@@ -85,7 +82,6 @@ public abstract class TemelDao {
     }
 
     public <T> T getirObje(Class<T> c, String id) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
         T result;
         try {
             result = c.cast(session.get(c, id));

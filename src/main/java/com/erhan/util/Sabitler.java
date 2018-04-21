@@ -1,6 +1,10 @@
 package com.erhan.util;
 
+/**
+ *
+ * @author erhan
+ */
 public class Sabitler {  
 	  
-    public static boolean ANAMENU=true;
+    public static final String PROJE_ADI="JSF Projesi";
 }

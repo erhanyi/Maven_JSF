@@ -2,6 +2,7 @@ package com.erhan.filter;
 
 import com.erhan.controller.SessionController;
 import java.io.IOException;
+import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -15,8 +16,11 @@ import javax.servlet.http.HttpServletResponse;
 @WebFilter(urlPatterns = "/secured/*")
 public class LoginFilter implements Filter {
 
+    @Inject
+    private SessionController sessionController;
+
     /**
-     * Checks if user is logged in. If not it redirects to the index.xhtml page.
+     * Checks if user is logged in. If not it redirects to the error.xhtml page.
      *
      * @param request
      * @param response
@@ -26,19 +30,16 @@ public class LoginFilter implements Filter {
      */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        // Get the kullaniciManagedBean from session attribute
-        request.setCharacterEncoding("UTF-8");
-        SessionController sessionController = (SessionController) ((HttpServletRequest) request).getSession().getAttribute("sessionController");
 
-        // For the first application request there is no kullaniciManagedBean in the session so user needs to log in
-        // For other requests loginBean is present but we need to check if user has logged in successfully
+        request.setCharacterEncoding("UTF-8");
+
         if (sessionController == null || !sessionController.isLoggedIn()) {
             String contextPath = ((HttpServletRequest) request).getContextPath();
             ((HttpServletResponse) response).sendRedirect(contextPath + "/error.xhtml");
-        } 
+        }
         chain.doFilter(request, response);
     }
-   
+
     @Override
     public void destroy() {
         // TODO Auto-generated method stub		

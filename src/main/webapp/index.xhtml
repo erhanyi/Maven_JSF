@@ -4,13 +4,14 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <link href="css/style.css" rel="stylesheet" type="text/css"/>   
-        <title>JSF Project</title>
+        <link href="css/style.css" rel="stylesheet" type="text/css"/> 
+        <p:importConstants type="#{msg.sabitlerPath}" var="sabitler" />
+        <title>#{sabitler.PROJE_ADI}</title>
     </h:head>
     <h:body>
         <h:form>  
-            <p:commandButton id="submit" style="color:red"
-                             value="Giriş" action="#{sessionController.giris}" ajax="false" />
+            <p:commandButton id="girisButon" style="color:red"
+                             value="Giriş" action="#{sessionController.giris}" />
         </h:form>
     </h:body>
 </html>

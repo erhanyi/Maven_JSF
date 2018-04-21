@@ -5,8 +5,8 @@
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <link href="css/style.css" rel="stylesheet" type="text/css"/>   
-
-        <title>JSF Project</title>
+        <p:importConstants type="#{msg.sabitlerPath}" var="sabitler" />
+        <title>#{Sabitler.PROJE_ADI}</title>
     </h:head>
     <h:body>
         <h:form>  
@@ -15,7 +15,7 @@
                     <h3>Hoşgeldiniz</h3>    		
                     <h:outputText value="Giriş yapmanız gerekmektedir."/>
                     <br/>
-                    <h:commandLink action="#{navigationBean.redirectToLogin}" value="Giriş sayfası için tıklayınız."/>
+                    <h:commandLink action="#{navigationController.toIndex}" value="Giriş sayfası için tıklayınız."/>
                 </center>
             </div>
         </h:form>

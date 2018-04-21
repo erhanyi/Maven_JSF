@@ -3,7 +3,7 @@ package com.erhan.util;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
-public class MessagesController {  
+public class Mesajlar {  
 	  
     public static void bilgiVer(String info) {  
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, info, "Bilgi Mesajı"));  

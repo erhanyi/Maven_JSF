@@ -11,9 +11,10 @@ import org.hibernate.Session;
  */
 @Stateless
 public class ProjeDao extends TemelDao{
+    
+   private final Session session = HibernateUtil.getSessionFactory().openSession(); 
    
    public Kullanici getirKullaniciTCyeGore(String tckimlikno) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
         Kullanici result;
         try {
             result = (Kullanici) session.createQuery("from Kullanici k where k.tckimlikno=:tckimlikno")
