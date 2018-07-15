@@ -21,9 +21,9 @@ public class KullaniciConverter implements Converter {
     public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object value) {
         if (value instanceof Kullanici) {
             Kullanici entity = (Kullanici) value;
-            if (entity instanceof Kullanici && entity.getTckimlikno()!= null) {
-                uiComponent.getAttributes().put(entity.getTckimlikno(), entity);
-                return entity.getTckimlikno();
+            if (entity instanceof Kullanici && entity.getKullaniciid()!= null) {
+                uiComponent.getAttributes().put(entity.getKullaniciid().toString(), entity);
+                return entity.getKullaniciid().toString();
             }
         }
         return "";

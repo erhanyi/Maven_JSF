@@ -12,6 +12,13 @@
   
         <!-- Mapping files -->
         <mapping class="com.erhan.model.Kullanici"></mapping>
+        <mapping class="com.erhan.model.Araba"></mapping>
+        
+        <mapping class="com.erhan.model.Okul"></mapping>
+        <mapping class="com.erhan.model.Okulders"></mapping>
+        <mapping class="com.erhan.model.Sinav"></mapping>
+        <mapping class="com.erhan.model.Sinavpuan"></mapping>
+        <mapping class="com.erhan.model.Okulsinav"></mapping>
 
     </session-factory>
 </hibernate-configuration>

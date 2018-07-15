@@ -7,6 +7,36 @@
         <h:form id="form">
             <p:messages id="messages" closable="true"/>
             <p:outputLabel value="Ana Sayfa" style="font-size: 20px;"/>  
+            <p:dataTable value="#{sessionController.puanList}" var="p" id="table" 
+                         emptyMessage="Liste boştur.">
+
+                <p:column headerText="ders adı" style="text-align: center; width: 100px">
+                    <p:outputLabel value="#{p.DERSADI}" />
+                </p:column>
+                <p:column headerText="sınav" style="text-align: center">                   
+                    <p:outputLabel value="#{p.SINAVADI}" />
+                </p:column>
+            </p:dataTable>
+            <p:dataTable var="ders" value="#{sessionController.dersList}" style="margin-top:40px">
+                <p:columnGroup type="header">
+                    <p:row>
+                        <p:column headerText="ders adı" />
+
+                        <ui:repeat value="#{sessionController.columns}" var="colo">
+                            <p:column headerText="#{colo}" />
+                        </ui:repeat>
+                    </p:row>
+                </p:columnGroup>
+
+                <p:column style="text-align: center; width: 100px">
+                    <h:outputText value="#{ders.dersadi}" />
+                </p:column>
+
+                <p:columns value="#{sessionController.columns}" var="col">
+                    <h:outputText value="#{ders.getSinavPuanData(col)}" />
+                </p:columns>
+
+            </p:dataTable>
         </h:form>
     </ui:define>
 </ui:composition>
