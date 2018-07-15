@@ -6,6 +6,7 @@
 package com.erhan.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -52,7 +53,7 @@ public class Sinavpuan implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "PUAN")
-    private int puan;
+    private BigDecimal puan;
 
     public Sinavpuan() {
     }
@@ -61,7 +62,7 @@ public class Sinavpuan implements Serializable {
         this.sinavpuanid = sinavpuanid;
     }
 
-    public Sinavpuan(Integer sinavpuanid, String ders, int okulsinavid, int puan) {
+    public Sinavpuan(Integer sinavpuanid, String ders, int okulsinavid, BigDecimal puan) {
         this.sinavpuanid = sinavpuanid;
         this.ders = ders;
         this.okulsinavid = okulsinavid;
@@ -92,11 +93,11 @@ public class Sinavpuan implements Serializable {
         this.okulsinavid = okulsinavid;
     }
 
-    public int getPuan() {
+    public BigDecimal getPuan() {
         return puan;
     }
 
-    public void setPuan(int puan) {
+    public void setPuan(BigDecimal puan) {
         this.puan = puan;
     }
 

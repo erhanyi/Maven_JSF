@@ -54,15 +54,15 @@ public class Okulders implements Serializable {
     private int okul;
     
     @Transient
-    private List<DersPuan> dersSinavPuanListesi;
+    private List<Puan> dersSinavPuanListesi;
     
     @Transient
     private Map<String,BigDecimal> sinavPuanData;
     
-    public BigDecimal getSinavPuanData(String sinavAdi) {
-        return sinavPuanData.get(sinavAdi);
-    }
-
+//    public BigDecimal getSinavPuanData(String sinavAdi) {
+//        return sinavPuanData.get(sinavAdi);
+//    }
+    
     public Map<String, BigDecimal> getSinavPuanData() {
         return sinavPuanData;
     }
@@ -71,13 +71,15 @@ public class Okulders implements Serializable {
         this.sinavPuanData = sinavPuanData;
     }
 
-    public List<DersPuan> getDersSinavPuanListesi() {
+    public List<Puan> getDersSinavPuanListesi() {
         return dersSinavPuanListesi;
     }
 
-    public void setDersSinavPuanListesi(List<DersPuan> dersSinavPuanListesi) {
+    public void setDersSinavPuanListesi(List<Puan> dersSinavPuanListesi) {
         this.dersSinavPuanListesi = dersSinavPuanListesi;
-    }   
+    }
+
+ 
 
     public Okulders() {
     }

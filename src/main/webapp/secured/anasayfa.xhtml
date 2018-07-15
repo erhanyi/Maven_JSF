@@ -2,22 +2,15 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
     <ui:define name="content">
         <h:form id="form">
             <p:messages id="messages" closable="true"/>
             <p:outputLabel value="Ana Sayfa" style="font-size: 20px;"/>  
-            <p:dataTable value="#{sessionController.puanList}" var="p" id="table" 
-                         emptyMessage="Liste boştur.">
-
-                <p:column headerText="ders adı" style="text-align: center; width: 100px">
-                    <p:outputLabel value="#{p.DERSADI}" />
-                </p:column>
-                <p:column headerText="sınav" style="text-align: center">                   
-                    <p:outputLabel value="#{p.SINAVADI}" />
-                </p:column>
-            </p:dataTable>
-            <p:dataTable var="ders" value="#{sessionController.dersList}" style="margin-top:40px">
+            
+            <p:dataTable var="ders" value="#{sessionController.dersList}" style="margin-top:40px"
+                         rowIndexVar="rowindex">
                 <p:columnGroup type="header">
                     <p:row>
                         <p:column headerText="ders adı" />
@@ -33,9 +26,12 @@
                 </p:column>
 
                 <p:columns value="#{sessionController.columns}" var="col">
-                    <h:outputText value="#{ders.getSinavPuanData(col)}" />
+                    <p:inputText value="#{ders.sinavPuanData[col]}" />
                 </p:columns>
-
+                <f:facet name="footer">                    
+                    <p:commandButton action="#{sessionController.kaydetPuan}" 
+                                     value="KAYDET"/>
+                </f:facet>
             </p:dataTable>
         </h:form>
     </ui:define>

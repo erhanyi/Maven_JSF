@@ -4,6 +4,7 @@ import com.erhan.model.DersPuan;
 import com.erhan.model.Kullanici;
 import com.erhan.model.Okulders;
 import com.erhan.model.Puan;
+import com.erhan.model.Sinavpuan;
 import com.erhan.util.HibernateUtil;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -53,21 +54,14 @@ public class ProjeDao extends TemelDao {
         Session session = HibernateUtil.getSessionFactory().openSession();
         List<Puan> puanList;
         try {
-            puanList = session.createSQLQuery("SELECT * FROM OKUL O, okulders OD, "
-                    + " okulsinav OS LEFT JOIN sinavpuan SP ON SP.OKULSINAVID=OS.OKULSINAVID, sinav S "
-                    + " WHERE O.okulid=OD.okul "
-                    + " AND O.okulid= " + okulId
-                    + " AND OS.OKUL=O.okulid "
-                    + " AND S.SINAVID=OS.SINAVID")
-                    .addScalar("okulid", StandardBasicTypes.INTEGER)
-                    .addScalar("okuladi", StandardBasicTypes.STRING)
-                    .addScalar("DERSID", StandardBasicTypes.INTEGER)
-                    .addScalar("DERSADI", StandardBasicTypes.STRING)
-                    .addScalar("OKULSINAVID", StandardBasicTypes.INTEGER)
-                    .addScalar("SINAVID", StandardBasicTypes.INTEGER)
-                    .addScalar("SINAVPUANID", StandardBasicTypes.INTEGER)
-                    .addScalar("PUAN", StandardBasicTypes.BIG_DECIMAL)
-                    .addScalar("SINAVADI", StandardBasicTypes.STRING)
+            puanList = session.createSQLQuery("SELECT aa.DERSID, aa.DERSADI, aa.SINAVID, aa.SINAVADI, aa.OKULSINAVID, sp.SINAVPUANID, sp.PUAN FROM ( SELECT od.DERSID, od.DERSADI, s.SINAVID, s.SINAVADI, os.OKULSINAVID FROM okulders OD, okulsinav OS, sinav S WHERE Os.okul = OD.okul AND Os.okul = "+okulId+" AND S.SINAVID = OS.SINAVID ) aa LEFT JOIN sinavpuan sp ON aa.okulsinavid = sp.OKULSINAVID AND aa.dersadi = sp.DERS")
+                    .addScalar("dersid", StandardBasicTypes.INTEGER)
+                    .addScalar("dersadi", StandardBasicTypes.STRING)
+                    .addScalar("sinavid", StandardBasicTypes.INTEGER)
+                    .addScalar("sinavadi", StandardBasicTypes.STRING)
+                    .addScalar("okulsinavid", StandardBasicTypes.INTEGER)
+                    .addScalar("sinavpuanid", StandardBasicTypes.INTEGER)
+                    .addScalar("puan", StandardBasicTypes.BIG_DECIMAL)
                     .setResultTransformer(Transformers.aliasToBean(Puan.class)).list();
         } catch (Exception e) {
             throw e;
@@ -113,6 +107,23 @@ public class ProjeDao extends TemelDao {
             session.close();
         }
         return dersPuanList;
+    }
+    
+    public void kaydetVeyaGuncelleSinavPuanList(List<Sinavpuan> objectList) {
+        
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            session.beginTransaction();
+            objectList.forEach((object) -> {
+                session.saveOrUpdate(object);
+            });
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
     }
 
 }

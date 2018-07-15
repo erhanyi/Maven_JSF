@@ -5,6 +5,7 @@ import com.erhan.model.DersPuan;
 import com.erhan.model.Kullanici;
 import com.erhan.model.Okulders;
 import com.erhan.model.Puan;
+import com.erhan.model.Sinavpuan;
 import com.erhan.util.Mesajlar;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -48,26 +50,30 @@ public class SessionController implements Serializable {
             loggedIn = true;
 
             dersList = projeDao.getirDersListesi(1);
+            List<Puan> puanListesi = projeDao.getirPuanListesi(1);
 
             columns = new ArrayList<>();
 
-            if (dersList != null && !dersList.isEmpty()) {
-                for (Okulders ders : dersList) {
-                    ders.setSinavPuanData(new LinkedHashMap<>());
-                    List<DersPuan> dersPuanList = projeDao.getirDersSinavPuanListesi(1, ders.getDersid());
+            if (puanListesi != null && !puanListesi.isEmpty()) {
+                columns = puanListesi.stream().map(p -> p.getSinavadi())
+                        .distinct().sorted()
+                        .collect(Collectors.toList());
 
-                    if (dersPuanList != null && !dersPuanList.isEmpty()) {
-                        ders.setDersSinavPuanListesi(dersPuanList);
+                if (dersList != null && !dersList.isEmpty()) {
+                    for (Okulders ders : dersList) {
+                        ders.setSinavPuanData(new LinkedHashMap<String, BigDecimal>());
 
-                        for (DersPuan dersPuan : dersPuanList) {
-                            ders.getSinavPuanData().put(dersPuan.getSinavadi(), new BigDecimal(BigInteger.ONE));
-                        }
-
-                        columns = dersPuanList.stream().map(e -> e.getSinavadi())
-                                .distinct().sorted()
+                        List<Puan> pList = puanListesi.stream()
+                                .filter(p -> Objects.equals(p.getDersid(), ders.getDersid()))
                                 .collect(Collectors.toList());
+                        ders.setDersSinavPuanListesi(pList);
+
+                        for (Puan puan : pList) {
+                            ders.getSinavPuanData().put(puan.getSinavadi(), puan.getPuan());
+                        }
                     }
                 }
+
             }
 
 //            puanList = projeDao.getirPuanListesi(1);
@@ -83,7 +89,6 @@ public class SessionController implements Serializable {
 //                data.put(puan.getSINAVADI(), new BigDecimal(BigInteger.ONE));
 //                puan.setData(data);
 //            }
-
             if (devemEtKontrol) {
                 devemEtKontrol = false;
                 return FacesContext.getCurrentInstance().getViewRoot().getViewId();
@@ -112,6 +117,43 @@ public class SessionController implements Serializable {
         try {
             devemEtKontrol = true;
             giris();
+        } catch (Exception e) {
+            Mesajlar.hataVer("Oturuma devam etme işleminde hata oluştu");
+        }
+    }
+
+    public void kaydetPuan() {
+        try {
+            
+            List<Sinavpuan> sinavpuanList=new ArrayList<>();
+
+            for (Okulders ders : dersList) {
+
+                for (Map.Entry<String, BigDecimal> entry : ders.getSinavPuanData().entrySet()) {
+                    String key = entry.getKey();
+                    if (!String.valueOf(entry.getValue()).equals("")) {
+                        BigDecimal value =new BigDecimal(String.valueOf(entry.getValue()));
+                        System.out.println(key+" - "+ value);
+                        
+                        Puan puan=ders.getDersSinavPuanListesi().stream()
+                                .filter(p -> Objects.equals(p.getSinavadi(), key))
+                                .findAny()
+                                .orElse(null);
+                        
+                        Sinavpuan sinavpuan=new Sinavpuan();
+                        sinavpuan.setDers(ders.getDersadi());
+                        sinavpuan.setPuan(value);
+                        sinavpuan.setOkulsinavid(puan.getOkulsinavid());
+                        sinavpuan.setSinavpuanid(puan.getSinavpuanid());                        
+                        sinavpuanList.add(sinavpuan);
+                    }                 
+                }
+            }
+            
+            if (!sinavpuanList.isEmpty()) {
+                projeDao.kaydetVeyaGuncelleSinavPuanList(sinavpuanList);
+            }
+
         } catch (Exception e) {
             Mesajlar.hataVer("Oturuma devam etme işleminde hata oluştu");
         }
